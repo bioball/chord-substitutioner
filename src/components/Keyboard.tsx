@@ -11,16 +11,28 @@ const octave = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1];
 
 export default class Keyboard extends React.Component<IAppProps> {
 
+  isKeyDown = false;
+
+  onMouseEnter = (pitch: Pitch) => () => {
+    if (this.isKeyDown) {
+      this.props.dispatch(soundActions.playPitch(pitch));
+    }
+  }
+
+  onMouseLeave = (pitch: Pitch) => () => {
+    if (this.onKeyDown) {
+      this.props.dispatch(soundActions.stopPitch(pitch));
+    }
+  }
+
   onKeyDown = (pitch: Pitch) => () => {
+    this.isKeyDown = true;
     this.props.dispatch(soundActions.playPitch(pitch));
   }
 
   onKeyUp = (pitch: Pitch) => () => {
+    this.isKeyDown = false;
     this.props.dispatch(soundActions.stopPitch(pitch));
-  }
-
-  pitchIsPlayed (pitch: Pitch) {
-    return !!_.find(this.props.sound.currentPlayingNotes, (p: Pitch) => p.value === pitch.value);
   }
 
   key = (pitch: Pitch) => {
@@ -37,8 +49,14 @@ export default class Keyboard extends React.Component<IAppProps> {
         key={pitch.value}
         onMouseDown={this.onKeyDown(pitch)}
         onMouseUp={this.onKeyUp(pitch)}
+        onMouseEnter={this.onMouseEnter(pitch)}
+        onMouseLeave={this.onMouseLeave(pitch)}
       />
     );
+  }
+
+  pitchIsPlayed (pitch: Pitch) {
+    return !!_.find(this.props.sound.currentPlayingNotes, (p: Pitch) => p.value === pitch.value);
   }
 
   keys () {

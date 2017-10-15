@@ -8,6 +8,7 @@ import Home from "./Home";
 import DevTools from "../components/DevTools";
 import { Dispatch } from "redux";
 import { AppAction } from "../actions";
+import Sound from "../components/Sound";
 
 export interface IAppProps extends IAppState {
   dispatch: Dispatch<AppAction>;
@@ -18,9 +19,12 @@ export default class App extends React.Component {
     return (
       <div>
         <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Route path="*" component={Home} />
-          </ConnectedRouter>
+          <div>
+            <ConnectedRouter history={history}>
+              <Route path="*" component={Home} />
+            </ConnectedRouter>
+            <Sound />
+          </div>
         </Provider>
         <DevTools store={store} />
       </div>
