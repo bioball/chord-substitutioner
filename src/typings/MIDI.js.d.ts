@@ -65,4 +65,4 @@ interface IMidi {
   Player: IPlayer;
 }
 
-declare var MIDI: IMidi;
+declare const MIDI: IMidi;

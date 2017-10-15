@@ -5,7 +5,6 @@ import pitches from "../constants/pitches";
 import Pitch from "../dto/Pitch";
 import * as soundActions from "../actions/soundActions";
 import * as classnames from "classnames";
-import * as _ from "lodash";
 
 const octave = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1];
 
@@ -20,7 +19,7 @@ export default class Keyboard extends React.Component<IAppProps> {
   }
 
   onMouseLeave = (pitch: Pitch) => () => {
-    if (this.onKeyDown) {
+    if (this.isKeyDown) {
       this.props.dispatch(soundActions.stopPitch(pitch));
     }
   }
@@ -56,7 +55,7 @@ export default class Keyboard extends React.Component<IAppProps> {
   }
 
   pitchIsPlayed (pitch: Pitch) {
-    return !!_.find(this.props.sound.currentPlayingNotes, (p: Pitch) => p.value === pitch.value);
+    return this.props.sound.currentPlayingNotes.contains(pitch);
   }
 
   keys () {

@@ -1,20 +1,24 @@
 import Pitch from "../dto/Pitch";
 import { AppAction } from "../actions";
-import { differenceBy } from "lodash";
+import { Set } from "immutable";
 
 export interface ISoundState {
-  currentPlayingNotes: Pitch[];
+  currentPlayingNotes: Set<Pitch>;
 }
 
-export default function soundReducer (state: ISoundState = { currentPlayingNotes: [] }, action: AppAction) {
+export const initialState: ISoundState = {
+  currentPlayingNotes: Set<Pitch>()
+};
+
+export default function soundReducer (state: ISoundState = initialState, action: AppAction) {
   switch (action.type) {
     case "PLAY_PITCHES":
       return {
-        currentPlayingNotes: action.pitches
+        currentPlayingNotes: state.currentPlayingNotes.union(action.pitches)
       };
     case "STOP_PITCHES":
       return {
-        currentPlayingNotes: differenceBy(state.currentPlayingNotes, action.pitches, (pitch) => pitch.value)
+        currentPlayingNotes: state.currentPlayingNotes.subtract(action.pitches)
       };
     default:
       return state;

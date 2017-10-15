@@ -1,5 +1,6 @@
 import Pitch from "../dto/Pitch";
+import { range } from "lodash";
 
-const pitches = Array(127).fill(0).map((_, i) => new Pitch(i + 1));
+const pitches = range(21, 109).map((i) => new Pitch(i));
 
 export default pitches;

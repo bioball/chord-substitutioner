@@ -1,38 +1,39 @@
 import { IAppProps } from "../containers/App";
 import * as React from "react";
 import { createConnectedComponent } from "../util/connectedComponent";
+import { Set } from "immutable";
+import Pitch from "../dto/Pitch";
 
-export interface IPlayingSoundState {
-  [pitch: number]: boolean;
-}
+/**
+ * Plays all the sounds found our store.
+ */
+export class Sound extends React.Component<IAppProps> {
 
-export class Sound extends React.Component<IAppProps, IPlayingSoundState> {
-
-  currentPlayingSounds: IPlayingSoundState = {};
+  currentPlayingSounds: Set<Pitch> = Set();
 
   componentWillMount () {
     MIDI.setVolume(0, 127);
   }
 
   componentWillReceiveProps (props: IAppProps) {
-    for (let pitch of props.sound.currentPlayingNotes) {
-      if (this.currentPlayingSounds[pitch.value]) {
-        continue;
-      }
-      this.currentPlayingSounds[pitch.value] = true;
-      MIDI.noteOn(0, pitch.value, 127, 0);
-    }
-    Object.keys(this.currentPlayingSounds).forEach((note) => {
-      if (props.sound.currentPlayingNotes.find((p) => p.value === parseInt(note, 10))) {
-        return;
-      }
-      this.currentPlayingSounds[note] = false;
-      MIDI.noteOff(0, parseInt(note, 10), 0);
-    });
+    props.sound.currentPlayingNotes.subtract(this.currentPlayingSounds)
+      .forEach((pitch: Pitch) => {
+        console.log(pitch);
+        if (!pitch) { return; }
+        MIDI.noteOn(0, pitch.value, 127, 0);
+      });
+
+    this.currentPlayingSounds.subtract(props.sound.currentPlayingNotes)
+      .forEach((pitch) => {
+        if (!pitch) { return; }
+        MIDI.noteOff(0, pitch.value, 0);
+      });
+    this.currentPlayingSounds = props.sound.currentPlayingNotes;
   }
-  
+
   render () {
     return null;
   }
 }
+
 export default createConnectedComponent(Sound);
