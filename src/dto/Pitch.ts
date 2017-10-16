@@ -11,7 +11,6 @@ export default class Pitch {
   octave: number;
 
   constructor (public value: number) {
-    // this.name = value % 
   }
 
 }

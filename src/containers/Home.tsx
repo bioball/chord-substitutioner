@@ -3,6 +3,7 @@ import * as React from "react";
 import connectedComponent from "../util/connectedComponent";
 import Keyboard from "../components/Keyboard";
 import Sound from "../components/Sound";
+import PlayHead from "../components/PlayHead";
 import SongChart from "../components/SongChart";
 
 @connectedComponent

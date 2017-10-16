@@ -2,7 +2,7 @@ import { IDuration } from "./Duration";
 import { NoteName } from "./Note";
 import Pitch from "./Pitch";
 import Note from "./Note";
-import { flatMap, range } from "lodash";
+import { flatMap, range, last } from "lodash";
 import Duration from "./Duration";
 
 export interface IInterval {
@@ -13,7 +13,8 @@ export interface IInterval {
 export type Quality = "Major" | "Minor" | "Augmented" | "Diminished";
 
 /**
- * A group of notes, musically speaking.
+ * A group of notes, musically speaking. I'm not keeping track of the exact notes that
+ * the chord should be representing.
  * 
  * TODO: Handle additional notes; 7ths, 9ths etc.
  */
@@ -25,7 +26,7 @@ export default class Chord {
    * 1. determine the possible names of all notes
    * 2. for each letter in a normal scale, find a root triad. Tack on any additions necessary
    */
-  static of = (pitches: Pitch[], duration: IDuration): Chord[] => {
+  static of = (pitches: Pitch[], duration: IDuration = Duration(1, 1)): Chord[] => {
     const possibleNotes = flatMap(pitches, Note.fromPitch);
     const thirds = ["F", "A", "C", "E", "G", "B", "D"];
     
@@ -37,7 +38,8 @@ export default class Chord {
     const triads = thirds.reduce(
       (list: Note[][], name, idx) => {
         const notes: Note[] = [];
-        while (idx++ < 3) {
+        const target = idx + 3;
+        while (idx++ < target) {
           const currNote = thirds[idx];
           const member = possibleNotes.find((note) => note.name === currNote);
           if (!member) {
@@ -58,23 +60,31 @@ export default class Chord {
   }
 
   static getQuality (notes: Note[]): Quality {
-    const intervals = notes.map((note, idx) => {
-      if (idx === 0) {
-        return 0;
-      }
-      return note.pitch.value - notes[idx - 1].pitch.value;
-    });
-    switch (intervals.join("")) {
-      case "43":
+    const intervals = notes
+      .reduce((res: number[], note, idx) => {
+        if (idx === 0) {
+          return [note.getIntervalFromC()];
+        }
+        let interval = note.getIntervalFromC();
+        if (res[idx - 1] > interval) {
+          interval += 12;
+        }
+        return res.concat([interval]);
+      }, [])
+      .map((nums) => nums - notes[0].getIntervalFromC())
+      .slice(1)
+      .join("");
+    switch (intervals) {
+      case "47":
         return "Major";
-      case "34":
+      case "37":
         return "Minor";
-      case "33":
+      case "36":
         return "Diminished";
-      case "44":
+      case "48":
         return "Augmented";
       default:
-        throw new Error("Somehow couldnt figre out the quality of this chord.");
+        throw new Error("Somehow couldnt figre out the quality of this chord. Intervals were " + intervals);
     }
   }
 

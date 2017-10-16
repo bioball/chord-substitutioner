@@ -27,8 +27,8 @@ export default class Note {
     const distanceToBase = pitch.value % 12;
     const notes = Note.getNoteName(pitch);
     return notes.map((name, idx) => {
-      if (noteNames.length === 1) {
-        return new Note(name, octave, "natural")
+      if (notes.length === 1) {
+        return new Note(name, octave, "natural");
       }
       const accidental = idx ? "flat" : "sharp";
       return new Note(name, octave, accidental);
@@ -75,9 +75,16 @@ export default class Note {
   }
 
   getPitch () {
-    return new Pitch((this.octave + 1) * 12 + this.getIntervalFromNote() + this.getAccidentalModifier());
+    return new Pitch((this.octave + 1) * 12 + this.getIntervalFromC());
   }
 
+  getIntervalFromC () {
+    return this.getIntervalFromNote() + this.getAccidentalModifier();
+  }
+
+  /**
+   * Get the absolute interval from C.
+   */
   getIntervalFromNote (): number {
     switch (this.name) {
       case 'C':
