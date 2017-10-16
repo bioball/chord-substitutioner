@@ -5,7 +5,7 @@ import { Set } from "immutable";
 import Pitch from "../dto/Pitch";
 
 /**
- * Plays all the sounds found our store.
+ * Plays all the sounds found in the store.
  */
 export class Sound extends React.Component<IAppProps> {
 
@@ -17,15 +17,11 @@ export class Sound extends React.Component<IAppProps> {
 
   componentWillReceiveProps (props: IAppProps) {
     props.sound.currentPlayingNotes.subtract(this.currentPlayingSounds)
-      .forEach((pitch: Pitch) => {
-        console.log(pitch);
-        if (!pitch) { return; }
+      .forEach((pitch) => {
         MIDI.noteOn(0, pitch.value, 127, 0);
       });
-
     this.currentPlayingSounds.subtract(props.sound.currentPlayingNotes)
       .forEach((pitch) => {
-        if (!pitch) { return; }
         MIDI.noteOff(0, pitch.value, 0);
       });
     this.currentPlayingSounds = props.sound.currentPlayingNotes;

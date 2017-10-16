@@ -14,9 +14,6 @@ export default class Loader extends React.Component<IAppProps> {
       onsuccess: () => {
         this.props.dispatch(midiLoaded());
         this.props.dispatch(replace("/"));
-      },
-      onprogress: (state, progress) => {
-        console.log(progress);
       }
     });
   }

@@ -6,7 +6,7 @@ import Pitch from "../dto/Pitch";
 import * as soundActions from "../actions/soundActions";
 import * as classnames from "classnames";
 
-const octave = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1];
+const naturals = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1];
 
 export default class Keyboard extends React.Component<IAppProps> {
 
@@ -24,18 +24,19 @@ export default class Keyboard extends React.Component<IAppProps> {
     }
   }
 
-  onKeyDown = (pitch: Pitch) => () => {
+  onMouseDown = (pitch: Pitch) => (evt: React.MouseEvent<HTMLDivElement>) => {
+    evt.preventDefault();
     this.isKeyDown = true;
     this.props.dispatch(soundActions.playPitch(pitch));
   }
 
-  onKeyUp = (pitch: Pitch) => () => {
+  onMouseUp = (pitch: Pitch) => () => {
     this.isKeyDown = false;
     this.props.dispatch(soundActions.stopPitch(pitch));
   }
 
   key = (pitch: Pitch) => {
-    const natural = octave[pitch.value % 12];
+    const natural = naturals[pitch.value % 12];
     const cname = classnames({
       "keyboard__key": true,
       "keyboard__key--natural": !!natural,
@@ -46,8 +47,8 @@ export default class Keyboard extends React.Component<IAppProps> {
       <div 
         className={cname}
         key={pitch.value}
-        onMouseDown={this.onKeyDown(pitch)}
-        onMouseUp={this.onKeyUp(pitch)}
+        onMouseDown={this.onMouseDown(pitch)}
+        onMouseUp={this.onMouseUp(pitch)}
         onMouseEnter={this.onMouseEnter(pitch)}
         onMouseLeave={this.onMouseLeave(pitch)}
       />

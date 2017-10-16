@@ -3,6 +3,7 @@ import * as React from "react";
 import connectedComponent from "../util/connectedComponent";
 import Keyboard from "../components/Keyboard";
 import Sound from "../components/Sound";
+import SongChart from "../components/SongChart";
 
 @connectedComponent
 export default class Home extends React.Component<IAppProps> {
@@ -11,6 +12,7 @@ export default class Home extends React.Component<IAppProps> {
       <div className="app">
         <Sound {...this.props} />
         <Keyboard {...this.props} />
+        <SongChart {...this.props} />
       </div>
     );
   }
