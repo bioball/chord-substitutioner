@@ -21,11 +21,18 @@ export type SoundAction = IPlayNotesAction | IStopPlayNotesAction;
  * Plays a group of notes. Will dispatch an action immediately to play the notes,
  * and schedules actions to stop playing each note based on duration.
  */
-export const playChord = (dispatch: Dispatch<AppAction>) => (chord: Chord) => {
-  dispatch({
+export const playChord = (chord: Chord) => {
+  return {
     type: "PLAY_PITCHES",
-    pitches: chord
-  });
+    pitches: chord.toPitches()
+  };
+};
+
+export const stopChord = (chord: Chord) => {
+  return {
+    type: "STOP_PITCHES",
+    pitches: chord.toPitches()
+  };
 };
 
 export const playPitch = (pitch: Pitch) => {

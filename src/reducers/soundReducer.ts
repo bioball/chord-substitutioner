@@ -18,7 +18,9 @@ export default function soundReducer (state: ISoundState = initialState, action:
       };
     case "STOP_PITCHES":
       return {
-        currentPlayingNotes: state.currentPlayingNotes.subtract(action.pitches)
+        currentPlayingNotes: state
+          .currentPlayingNotes
+          .filterNot((pitch) => !!action.pitches.find((p) => p.value === pitch.value))
       };
     default:
       return state;

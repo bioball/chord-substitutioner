@@ -68,8 +68,8 @@ export default class Note {
   
   constructor (
     public name: NoteName,
-    public octave: number,
-    public accidental: Accidental
+    public octave: number = 3,
+    public accidental: Accidental = "natural"
   ) {
     this.pitch = this.getPitch();
   }
@@ -119,8 +119,8 @@ export default class Note {
     }
   }
 
-  getName () {
-    return `${ this.name }/${ this.getAccidental() }`;
+  prettyName () {
+    return `${ this.name }${ this.getAccidental() }`;
   }
 
   getAccidental () {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { IAppProps } from "../containers/App";
 import Chord from "../dto/Chord";
 import PlayHead from "./PlayHead";
-import { playChord } from "../actions/soundActions";
+import { playChord, stopChord } from "../actions/soundActions";
 import "../styles/SongChart.sass";
 
 export interface ISongChartState {
@@ -17,7 +17,18 @@ export default class SongChart extends React.Component<IAppProps, ISongChartStat
 
   play = () => {
     this.setState({ playing: true });
-    // this.props.dispatch(playChord())
+    this.handlePlayChords(this.props.song.chords);
+  }
+
+  handlePlayChords = (chords: Chord[], idx = 0): void => {
+    const current = chords[0];
+    this.props.dispatch(playChord(current));
+    setTimeout(() => {
+      this.props.dispatch(stopChord(current));
+      if (chords.length > 1 && this.state.playing) {
+        return this.handlePlayChords(chords.slice(1), idx + 1);
+      }
+    }, (current.duration.numerator / current.duration.denominator) * 2000);
   }
 
   chord = (chord: Chord, idx: number) => {

@@ -56,7 +56,7 @@ export default class Keyboard extends React.Component<IAppProps> {
   }
 
   pitchIsPlayed (pitch: Pitch) {
-    return this.props.sound.currentPlayingNotes.contains(pitch);
+    return !!this.props.sound.currentPlayingNotes.find((p) => p.value === pitch.value);
   }
 
   keys () {

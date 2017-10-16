@@ -53,9 +53,8 @@ export default class Chord {
     );
 
     return triads.map((chord) => {
-      const name = chord[0].name;
       const quality = Chord.getQuality(chord);
-      return new Chord(name, quality, duration);
+      return new Chord(chord[0], quality, duration);
     });
   }
 
@@ -89,7 +88,7 @@ export default class Chord {
   }
 
   constructor (
-    public name: NoteName,
+    public root: Note,
     public quality: Quality,
     public duration: IDuration = Duration(1, 1)
   ) {}
@@ -101,7 +100,39 @@ export default class Chord {
       "Diminished": "dim",
       "Augmented": "+"
     };
-    return `${ this.name }${ quality[this.quality] }`;
+    return `${ this.root.prettyName() }${ quality[this.quality] }`;
+  }
+
+  toPitches (): Pitch[] {
+    const basePitch = this.root.getPitch();
+    switch (this.quality) {
+      case "Major":
+        return [
+          new Pitch(basePitch.value),
+          new Pitch(basePitch.value + 4),
+          new Pitch(basePitch.value + 7)
+        ];
+      case "Minor":
+        return [
+          new Pitch(basePitch.value),
+          new Pitch(basePitch.value + 3),
+          new Pitch(basePitch.value + 7)
+        ];
+      case "Augmented":
+        return [
+          new Pitch(basePitch.value),
+          new Pitch(basePitch.value + 4),
+          new Pitch(basePitch.value + 8)
+        ];
+      case "Diminished":
+        return [
+          new Pitch(basePitch.value),
+          new Pitch(basePitch.value + 3),
+          new Pitch(basePitch.value + 6)
+        ];
+      default:
+        throw new Error("Unrecognized quality: " + this.quality);
+    }
   }
 
 }
