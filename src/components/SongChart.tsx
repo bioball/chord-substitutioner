@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { IAppProps } from "../containers/App";
 import Chord from "../dto/Chord";
 import PlayHead from "./PlayHead";
@@ -20,15 +20,17 @@ export default class SongChart extends React.Component<IAppProps, ISongChartStat
     this.handlePlayChords(this.props.song.chords);
   }
 
-  handlePlayChords = (chords: Chord[], idx = 0): void => {
+  handlePlayChords (chords: Chord[], idx: number = 0): void {
     const current = chords[0];
     this.props.dispatch(playChord(current));
     setTimeout(() => {
       this.props.dispatch(stopChord(current));
       if (chords.length > 1 && this.state.playing) {
         return this.handlePlayChords(chords.slice(1), idx + 1);
+      } else {
+        this.setState({ playing: false });
       }
-    }, (current.duration.numerator / current.duration.denominator) * 2000);
+    }, (current.duration.numerator / current.duration.denominator) * 1000);
   }
 
   chord = (chord: Chord, idx: number) => {

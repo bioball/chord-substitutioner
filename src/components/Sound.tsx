@@ -1,5 +1,5 @@
 import { IAppProps } from "../containers/App";
-import * as React from "react";
+import React from "react";
 import { createConnectedComponent } from "../util/connectedComponent";
 import { Set } from "immutable";
 import Pitch from "../dto/Pitch";

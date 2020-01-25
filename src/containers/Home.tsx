@@ -1,5 +1,5 @@
 import { IAppProps } from "./App";
-import * as React from "react";
+import React from "react";
 import connectedComponent from "../util/connectedComponent";
 import Keyboard from "../components/Keyboard";
 import Sound from "../components/Sound";

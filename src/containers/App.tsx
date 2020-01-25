@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { IAppState } from "../reducers";
 import { Provider } from "react-redux";
 import store, { history } from "../store";
 import { Route, RouteComponentProps } from "react-router";
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import Home from "./Home";
 import DevTools from "../components/DevTools";
 import { Dispatch } from "redux";

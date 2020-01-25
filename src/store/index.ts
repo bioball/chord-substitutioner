@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { routerMiddleware } from "react-router-redux";
 import DevTools from "../components/DevTools";
-import reducer from "../reducers";
+import createReducer from "../reducers";
 import { createBrowserHistory } from "history";
 import loaderMiddleware from "../middleware/loaderMiddleware";
 
@@ -10,7 +10,7 @@ export const middleware = applyMiddleware(loaderMiddleware, routerMiddleware(his
 
 export const enhancer = compose(middleware, DevTools.instrument());
 
-const store = createStore(reducer, {}, enhancer);
+const store = createStore(createReducer(history), {}, enhancer);
 
 /* tslint:disable:no-string-literal */
 if (module["hot"]) {

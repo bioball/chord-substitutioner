@@ -4,7 +4,7 @@ export interface IMidiLoadedAction {
 
 export type LoaderAction = IMidiLoadedAction;
 
-export const midiLoaded = () => {
+export const midiLoaded = (): IMidiLoadedAction => {
   return {
     type: "MIDI_LOADED"
   };

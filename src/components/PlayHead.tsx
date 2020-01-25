@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { IAppProps } from "../containers/App";
 
 export interface IPlayHeadProps extends IAppProps {

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import '../styles/Keyboard.sass';
 import { IAppProps } from "../containers/App";
 import pitches from "../constants/pitches";
 import Pitch from "../dto/Pitch";
 import * as soundActions from "../actions/soundActions";
-import * as classnames from "classnames";
+import classnames from "classnames";
 
 const naturals = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1];
 

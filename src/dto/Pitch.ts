@@ -6,9 +6,9 @@ const notes = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
  */
 export default class Pitch {
 
-  name: string;
+  // name: string;
 
-  octave: number;
+  // octave: number;
 
   constructor (public value: number) {
   }

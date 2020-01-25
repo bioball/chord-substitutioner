@@ -25,8 +25,16 @@ export default class Chord {
    * 
    * 1. determine the possible names of all notes
    * 2. for each letter in a normal scale, find a root triad. Tack on any additions necessary
+   * 
+   * This is a pretty naive implementation. C E G is correctly inferred as C Major, but it could also
+   * be interpreted as Em13, and currently this algo is failing to figure that out.
+   * 
+   * This also doesn't consider double sharps or double flats. So it'll fail to recognize fully diminished
+   * 7ths and stuff like that.
+   * 
+   * TODO: Consider B#, Fb as possibilities.
    */
-  static of = (pitches: Pitch[], duration: IDuration = Duration(1, 1)): Chord[] => {
+  static infer = (pitches: Pitch[], duration: IDuration = Duration(1, 1)): Chord[] => {
     const possibleNotes = flatMap(pitches, Note.fromPitch);
     const thirds = ["F", "A", "C", "E", "G", "B", "D"];
     
@@ -35,22 +43,19 @@ export default class Chord {
     });
 
     // for each note, traverse up the list and try to determine if a root triad exists.
-    const triads = thirds.reduce(
-      (list: Note[][], name, idx) => {
-        const notes: Note[] = [];
-        const target = idx + 3;
-        while (idx++ < target) {
-          const currNote = thirds[idx];
-          const member = possibleNotes.find((note) => note.name === currNote);
-          if (!member) {
-            return list;
-          }
-          notes.push(member);
+    const triads = thirds.reduce((list: Note[][], name, idx) => {
+      const notes: Note[] = [];
+      const target = idx + 3;
+      while (idx++ < target) {
+        const currNote = thirds[idx % 7];
+        const member = possibleNotes.find((note) => note.name === currNote);
+        if (!member) {
+          return list;
         }
-        return list.concat([notes]);
-      },
-      []
-    );
+        notes.push(member);
+      }
+      return list.concat([notes]);
+    }, []);
 
     return triads.map((chord) => {
       const quality = Chord.getQuality(chord);

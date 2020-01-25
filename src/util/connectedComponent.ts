@@ -1,11 +1,11 @@
 import { IAppState } from "../reducers";
 import { Dispatch } from "redux";
-import { connect } from "react-redux";
-import { IAppProps } from "../containers/App";
+import { connect, ComponentClass } from "react-redux";
 import { AppAction } from "../actions";
+import { IAppProps } from "../containers/App";
 
 interface IDispatchProps {
-  dispatch: Dispatch<IAppProps>;
+  dispatch: Dispatch<AppAction>;
 }
 
 /**
@@ -22,12 +22,12 @@ export const mapStateToProps = (state: IAppState) => state;
 
 export const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => ({ dispatch });
 
-const connectDecorator = connect<IAppState, IDispatchProps, {}>(mapStateToProps, mapDispatchToProps);
+const connectDecorator = connect(mapStateToProps, mapDispatchToProps);
 
 /**
  * This is a fake type so TypeScript doesn't complain about the decorator.
  */
-type Connector = <Props, State, C extends IComponentClass<Props, State>>(Component: C) => C;
+type Connector = <C extends ComponentClass<IAppProps>>(Component: C) => C;
 
 /**
  * This is meant to be used as a decorator.
