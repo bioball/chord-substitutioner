@@ -42,7 +42,7 @@
     "@types/redux-devtools": "^3.0.40",
     "@types/redux-devtools-dock-monitor": "^1.1.31",
     "@types/redux-devtools-log-monitor": "^1.0.32",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "typescript": "^3.7.5"
   },
   "babel": {
